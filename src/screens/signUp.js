@@ -8,38 +8,23 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-const Login = ({navigation}) => {
-  const [email, setEmail] = useState('');
+export default function SignUp({navigation}) {
+  const [name, setName] = useState('');
+  const [city, setCity] = useState(null);
+  const [email, setEmail] = useState(null);
   const [pass, setPass] = useState(null);
-  const [isDisplayed, setisDisplayed] = useState(false);
-  //   const AddStudentData = () => {
-  //     fetch('http://192.168.31.241/fyp_api/api/student/Addstudent', {
-  //       method: 'POST',
-  //       headers: {
-  //         Accept: 'application/json',
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         Email: email,
-  //         Password: pass,
-  //       }),
-  //     })
-  //       .then(response => response.json())
-  //       .catch(error => {
-  //         console.log('Api call error');
-  //         alert(error.message);
-  //       });
-  //   };
+  const [address, setAddress] = useState(null);
+  const [contactNo, setContactNo] = useState(null);
   return (
     <View style={{flex: 1, backgroundColor: '#0947ed'}}>
-      <View style={{flex: 0.4, alignItems: 'center', justifyContent: 'center'}}>
+      <View style={{flex: 0.2, alignItems: 'center', justifyContent: 'center'}}>
         <Text style={{fontSize: 24, textAlign: 'center', color: '#FFFFFF'}}>
-          Food Price List And Quality WatchDogs
+          SignUp as user
         </Text>
       </View>
       <View
         style={{
-          flex: 0.6,
+          flex: 0.8,
           borderTopStartRadius: 10,
           borderTopEndRadius: 10,
           backgroundColor: '#FFFFFF',
@@ -57,11 +42,51 @@ const Login = ({navigation}) => {
               borderRadius: 5,
               color: '#000',
             }}
-            placeholder="Email"
+            placeholder="Name"
             placeholderTextColor={'#000'}
-            onChangeText={setEmail}
-            value={email}
+            onChangeText={setName}
+            value={name}
           />
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: 10,
+            }}>
+            <TextInput
+              style={{
+                minWidth: '80%',
+                borderWidth: 1,
+                borderRadius: 5,
+                color: '#000',
+              }}
+              secureTextEntry
+              placeholder="City"
+              placeholderTextColor={'#000'}
+              onChangeText={setCity}
+              value={city}
+            />
+          </View>
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: 10,
+            }}>
+            <TextInput
+              style={{
+                minWidth: '80%',
+                borderWidth: 1,
+                borderRadius: 5,
+                color: '#000',
+              }}
+              secureTextEntry
+              placeholder="Email"
+              placeholderTextColor={'#000'}
+              onChangeText={setEmail}
+              value={email}
+            />
+          </View>
           <View
             style={{
               alignItems: 'center',
@@ -80,6 +105,46 @@ const Login = ({navigation}) => {
               placeholderTextColor={'#000'}
               onChangeText={setPass}
               value={pass}
+            />
+          </View>
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: 10,
+            }}>
+            <TextInput
+              style={{
+                minWidth: '80%',
+                borderWidth: 1,
+                borderRadius: 5,
+                color: '#000',
+              }}
+              secureTextEntry
+              placeholder="Address"
+              placeholderTextColor={'#000'}
+              onChangeText={setAddress}
+              value={address}
+            />
+          </View>
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: 10,
+            }}>
+            <TextInput
+              style={{
+                minWidth: '80%',
+                borderWidth: 1,
+                borderRadius: 5,
+                color: '#000',
+              }}
+              secureTextEntry
+              placeholder="Contact No."
+              placeholderTextColor={'#000'}
+              onChangeText={setContactNo}
+              value={contactNo}
             />
           </View>
         </View>
@@ -103,7 +168,7 @@ const Login = ({navigation}) => {
             }}
             // onPress={AddStudentData}
           >
-            <Text sytle={{color: '#000'}}>Login</Text>
+            <Text sytle={{color: '#000'}}>SignUp</Text>
           </TouchableOpacity>
         </View>
         <View
@@ -112,9 +177,9 @@ const Login = ({navigation}) => {
             marginTop: 10,
             justifyContent: 'center',
           }}>
-          <Text style={{color: '#000'}}>Dont have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-            <Text style={{color: 'red'}}>SignUp</Text>
+          <Text style={{color: '#000'}}>Already have an account </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Text style={{color: 'red'}}>LogIn</Text>
           </TouchableOpacity>
         </View>
         {/* {isDisplayed ? (
@@ -148,7 +213,7 @@ const Login = ({navigation}) => {
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   sectionContainer: {
@@ -168,5 +233,3 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
-
-export default Login;
