@@ -101,8 +101,7 @@ const Login = ({navigation}) => {
               justifyContent: 'center',
               marginTop: 20,
             }}
-            // onPress={AddStudentData}
-          >
+            onPress={() => navigation.navigate('Daily Price List')}>
             <Text sytle={{color: '#000'}}>Login</Text>
           </TouchableOpacity>
         </View>
