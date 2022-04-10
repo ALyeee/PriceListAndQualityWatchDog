@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import axios from 'axios';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   View,
@@ -7,29 +8,56 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState(null);
-  const [isDisplayed, setisDisplayed] = useState(false);
-  //   const AddStudentData = () => {
-  //     fetch('http://192.168.31.241/fyp_api/api/student/Addstudent', {
-  //       method: 'POST',
-  //       headers: {
-  //         Accept: 'application/json',
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         Email: email,
-  //         Password: pass,
-  //       }),
-  //     })
-  //       .then(response => response.json())
-  //       .catch(error => {
-  //         console.log('Api call error');
-  //         alert(error.message);
-  //       });
-  //   };
+  const [loading, setLoading] = useState(false);
+
+  const signin = () => {
+    fetch('http://localhost:8089/myfyp/api/dummy/getall', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    })
+      .then(responseJson => responseJson.json())
+      .then(responseJson => {
+        if (typeof responseJson === 'string') {
+          alert('Invalid Cradentials');
+        }
+      })
+      .catch(error => {
+        //
+        console.log('Api call error');
+        alert(error.message);
+      });
+  };
+  
+    const LoginHandler = () => {
+      setLoading(true)
+      // const data = await fetch(`http://192.168.18.83:8089/myfyp/api/dummy/validateUser?email=${email}&password=${pass}`, {
+      //   method: 'POST',
+      //   headers: {
+      //     Accept: 'application/json',
+      //     'Content-Type': 'application/json',
+      //   }
+       
+      // })
+      axios.get(`http://localhost:8089/myfyp/api/dummy/getall`)
+      .then(function (response) {
+        console.log(response);
+        setLoading(false)
+      })
+      .catch(function (error) {
+        console.log(error);
+        setLoading(false)
+      });
+        
+        // navigation.navigate('Daily Price List')
+    };
   return (
     <View style={{flex: 1, backgroundColor: '#0947ed'}}>
       <View style={{flex: 0.4, alignItems: 'center', justifyContent: 'center'}}>
@@ -101,8 +129,8 @@ const Login = ({navigation}) => {
               justifyContent: 'center',
               marginTop: 20,
             }}
-            onPress={() => navigation.navigate('Daily Price List')}>
-            <Text sytle={{color: '#000'}}>Login</Text>
+            onPress={() => signin()}>
+            {!loading ? <Text sytle={{color: '#000'}}>Login</Text> : <ActivityIndicator animating={loading} color={'#ffffff'} />}
           </TouchableOpacity>
         </View>
         <View

@@ -6,18 +6,38 @@ import {TableWrapper} from 'react-native-table-component';
 import {Col} from 'react-native-table-component';
 import {Rows} from 'react-native-table-component';
 import {Actionsheet, Box, NativeBaseProvider, useDisclose} from 'native-base';
+import { Cell } from 'react-native-table-component';
 
 export default function LiveStock() {
   const {isOpen, onOpen, onClose} = useDisclose();
   const [selected, setSelected] = useState('Islamabad');
-  const tableTitle = ['1', '2', '3', '4'];
-  const [head, setHead] = useState(['Sr. No', 'Product', 'Unit', 'Price']);
+  const [head, setHead] = useState([ 'Product', 'Unit', 'Price']);
   const [data, setData] = useState([
-    ['Chicken', '1Kg', '400'],
-    ['Eggs', '1Dozen', '150'],
-    ['Beef', '1Kg', '750'],
-    ['Mutton', '1Kg', '1050'],
+    ['Chicken', '1Kg', '400','1'],
+    ['Eggs', '1Dozen', '150','1'],
+    ['Beef', '1Kg', '750','1'],
+    ['Mutton', '1Kg', '1050','1'],
   ]);
+
+  const element = (data, index) => (
+    <View style={{flexDirection:'row'}} >
+    <TouchableOpacity onPress={() => _alertIndex(data)}>
+      <View style={styles.btn}>
+        <Text style={styles.btnText}>edit</Text>
+      </View>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={() => _alertIndex(data)}>
+      <View style={styles.btn}>
+        <Text style={styles.btnText}>delete</Text>
+      </View>
+    </TouchableOpacity>
+    </View>
+  );
+
+  const _alertIndex = (data) => {
+    alert(`This is row ${data}`);
+  }
+
   return (
     <View style={{flex: 1}}>
       <View
@@ -64,20 +84,21 @@ export default function LiveStock() {
               style={styles.head}
               textStyle={styles.text}
             />
-            <TableWrapper style={styles.wrapper}>
-              <Col
-                data={tableTitle}
-                style={styles.title}
-                heightArr={[28, 28]}
-                textStyle={styles.text}
-              />
-              <Rows
-                data={data}
-                flexArr={[2, 1, 1]}
-                style={styles.row}
-                textStyle={styles.text}
-              />
-            </TableWrapper>
+            {
+            data.map((rowData, index) => {
+              // console.log('row data',rowData);
+              return (
+              <TableWrapper key={index} style={styles.row}>
+                {
+                  rowData.map((cellData, cellIndex) => {
+                    // console.log('cellfsts',cellData);
+                    return(
+                    <Cell key={cellIndex} data={cellIndex === 3 ? element(rowData, index) : cellData} textStyle={styles.text}/>
+                  )})
+                }
+              </TableWrapper>
+            )})
+          }
           </Table>
         </View>
       </View>
