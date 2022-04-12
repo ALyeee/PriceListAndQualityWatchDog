@@ -19,7 +19,7 @@ const Login = ({navigation}) => {
     fetch('http://localhost:8089/myfyp/api/dummy/getall', {
       method: 'GET',
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       }
     })
