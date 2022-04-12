@@ -12,7 +12,7 @@ const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState(null);
   const [isDisplayed, setisDisplayed] = useState(false);
-  //   const AddStudentData = () => {
+  //   const SignInHandle = () => {
   //     fetch('http://192.168.31.241/fyp_api/api/student/Addstudent', {
   //       method: 'POST',
   //       headers: {

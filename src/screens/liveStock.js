@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Table} from 'react-native-table-component';
 import {Row} from 'react-native-table-component';
 import {TableWrapper} from 'react-native-table-component';
@@ -10,14 +10,37 @@ import {Actionsheet, Box, NativeBaseProvider, useDisclose} from 'native-base';
 export default function LiveStock() {
   const {isOpen, onOpen, onClose} = useDisclose();
   const [selected, setSelected] = useState('Islamabad');
-  const tableTitle = ['1', '2', '3', '4'];
-  const [head, setHead] = useState(['Sr. No', 'Product', 'Unit', 'Price']);
+  const [head, setHead] = useState(['Product', 'Unit', 'Price']);
   const [data, setData] = useState([
     ['Chicken', '1Kg', '400'],
     ['Eggs', '1Dozen', '150'],
     ['Beef', '1Kg', '750'],
     ['Mutton', '1Kg', '1050'],
   ]);
+
+  // useEffect(() => {
+
+  //   fetch(
+  //     `http://192.168.18.83/myfyp/api/dummy/getRecordByCatagoryAndCity?cat=fruit&city=islamabad`,{
+  //             method: 'GET',
+  //             headers: {
+  //               Accept: 'application/json',
+  //               'Content-Type': 'application/json',
+  //             }}
+  //   )
+  //     .then(response => {
+  //       const data = response.json();
+  //       console.log('====================================');
+  //       console.log('data', data);
+  //       console.log('====================================');
+  //     })
+  //     .catch(error => {
+  //       console.log('Api call error');
+  //       alert(error.message);
+  //     });
+
+  // }, []);
+
   return (
     <View style={{flex: 1}}>
       <View
@@ -60,17 +83,11 @@ export default function LiveStock() {
           <Table borderStyle={{borderWidth: 0.5}}>
             <Row
               data={head}
-              flexArr={[1, 2, 1, 1]}
+              flexArr={[2, 1, 1]}
               style={styles.head}
               textStyle={styles.text}
             />
             <TableWrapper style={styles.wrapper}>
-              <Col
-                data={tableTitle}
-                style={styles.title}
-                heightArr={[28, 28]}
-                textStyle={styles.text}
-              />
               <Rows
                 data={data}
                 flexArr={[2, 1, 1]}
