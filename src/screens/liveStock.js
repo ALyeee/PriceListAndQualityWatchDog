@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Table} from 'react-native-table-component';
 import {Row} from 'react-native-table-component';
 import {TableWrapper} from 'react-native-table-component';
@@ -80,7 +80,7 @@ export default function LiveStock() {
           <Table borderStyle={{borderWidth: 0.5}}>
             <Row
               data={head}
-              flexArr={[1, 2, 1, 1]}
+              flexArr={[2, 1, 1]}
               style={styles.head}
               textStyle={styles.text}
             />

@@ -16,24 +16,26 @@ const Login = ({navigation}) => {
   const [loading, setLoading] = useState(false);
 
   const signin = () => {
-    fetch('http://localhost:8089/myfyp/api/dummy/getall', {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      }
-    })
-      .then(responseJson => responseJson.json())
-      .then(responseJson => {
-        if (typeof responseJson === 'string') {
-          alert('Invalid Cradentials');
-        }
-      })
-      .catch(error => {
-        //
-        console.log('Api call error');
-        alert(error.message);
-      });
+        navigation.navigate('Daily Price List')
+
+    // fetch('http://localhost:8089/myfyp/api/dummy/getall', {
+    //   method: 'GET',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json',
+    //   }
+    // })
+    //   .then(responseJson => responseJson.json())
+    //   .then(responseJson => {
+    //     if (typeof responseJson === 'string') {
+    //       alert('Invalid Cradentials');
+    //     }
+    //   })
+    //   .catch(error => {
+    //     //
+    //     console.log('Api call error');
+    //     alert(error.message);
+    //   });
   };
   
     const LoginHandler = () => {
