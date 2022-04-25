@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Table} from 'react-native-table-component';
 import {Row} from 'react-native-table-component';
 import {TableWrapper} from 'react-native-table-component';
@@ -20,6 +20,9 @@ export default function EssentialComodities() {
     ['Lobhiya Red', '1Kg', '150',''],
     ['Rice', '1Kg', '200',''],
   ]);
+
+  
+  
 
   const element = (data, index) => (
     <View style={{flexDirection:'row'}} >

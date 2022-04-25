@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Table} from 'react-native-table-component';
 import {Row} from 'react-native-table-component';
 import {TableWrapper} from 'react-native-table-component';
@@ -7,6 +7,8 @@ import {Col} from 'react-native-table-component';
 import {Rows} from 'react-native-table-component';
 import {Actionsheet, Box, NativeBaseProvider, useDisclose} from 'native-base';
 import { Cell } from 'react-native-table-component';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export default function Fruits() {
   const {isOpen, onOpen, onClose} = useDisclose();
@@ -17,6 +19,32 @@ export default function Fruits() {
     ['Banana', '1 dozen', '80','2'],
     ['mango', '1Kg', '150','3'],
   ]);
+  const [userData, setUserData] = useState(null)
+  const [furits, setFruits] = useState(null)
+
+  const UserData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@userData')
+      console.log('====================================');
+      console.log('jsonValue',JSON.parse(jsonValue));
+      console.log('====================================');
+      setUserData(JSON.parse(jsonValue))
+    } catch(e) {  
+      // error reading value
+    }
+  }
+  useEffect( () => {
+    UserData()
+    axios.get(`http://localhost:8089/myfyp/api/dummy/getRecordByCatagoryAndCity?cat=FRUIT&city=${userData?.city}`)
+            .then(function (response) {
+              console.log(response.data);
+              if(response.data === 'Found'){
+                setFruits([])
+              } else {
+                setFruits(response.data[0])
+              }
+            })
+  }, [])
 
   const element = (data, index) => (
     <View style={{flexDirection:'row'}} >
@@ -59,14 +87,14 @@ export default function Fruits() {
         }}>
         <View style={{minWidth: '90%'}}>
           <TouchableOpacity
-            onPress={onOpen}
+            onPress={userData.role === 'admin' ? null : onOpen}
             style={{
               borderWidth: 1,
               marginTop: 20,
               borderRadius: 10,
               alignSelf: 'flex-start',
             }}>
-            <Text style={{color: '#000', padding: 5}}>{selected}</Text>
+            <Text style={{color: '#000', padding: 5}}>{userData?.role === 'admin' ? userData?.city : selected}</Text>
           </TouchableOpacity>
         </View>
         <View style={{minWidth: '90%'}}>

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, {useState} from 'react';
 import {
   SafeAreaView,
@@ -7,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import { HelperText } from 'react-native-paper';
 
 export default function SignUp({navigation}) {
   const [name, setName] = useState('');
@@ -15,6 +17,35 @@ export default function SignUp({navigation}) {
   const [pass, setPass] = useState(null);
   const [address, setAddress] = useState(null);
   const [contactNo, setContactNo] = useState(null);
+  const [success, setSuccess] = useState('');
+  const [isSucess, setIsSuccess] = useState(false);
+  const SignUpHandler = () => {
+    // setLoading(true)
+      axios.post(`http://localhost:8089/myfyp/api/dummy/addNewUser`,{
+        name: name,
+    email: email,
+    password: pass,
+    city: city,
+    address: address,
+    contact: contactNo,
+    role: "user"
+      })
+          .then(function (response) {
+            console.log(response.data);
+            if(response.data === 'User Added Successfully'){
+              setIsSuccess(true)
+              setTimeout(() => {
+                setIsSuccess(false)
+              }, 2000);
+              setSuccess('SignUp Successfully')
+            } 
+          })
+          .catch(function (error) {
+            setIsSuccess(true)
+            setSuccess('Error Occured')
+            console.log('error in signin',error);
+          });
+  };
   return (
     <View style={{flex: 1, backgroundColor: '#0947ed'}}>
       <View style={{flex: 0.2, alignItems: 'center', justifyContent: 'center'}}>
@@ -35,6 +66,9 @@ export default function SignUp({navigation}) {
             justifyContent: 'center',
             marginTop: 50,
           }}>
+            <HelperText type="info" visible={isSucess}>
+        {success}
+      </HelperText>
           <TextInput
             style={{
               minWidth: '80%',
@@ -60,7 +94,7 @@ export default function SignUp({navigation}) {
                 borderRadius: 5,
                 color: '#000',
               }}
-              secureTextEntry
+              
               placeholder="City"
               placeholderTextColor={'#000'}
               onChangeText={setCity}
@@ -80,7 +114,7 @@ export default function SignUp({navigation}) {
                 borderRadius: 5,
                 color: '#000',
               }}
-              secureTextEntry
+              
               placeholder="Email"
               placeholderTextColor={'#000'}
               onChangeText={setEmail}
@@ -120,7 +154,7 @@ export default function SignUp({navigation}) {
                 borderRadius: 5,
                 color: '#000',
               }}
-              secureTextEntry
+              
               placeholder="Address"
               placeholderTextColor={'#000'}
               onChangeText={setAddress}
@@ -140,10 +174,11 @@ export default function SignUp({navigation}) {
                 borderRadius: 5,
                 color: '#000',
               }}
-              secureTextEntry
+              
               placeholder="Contact No."
               placeholderTextColor={'#000'}
               onChangeText={setContactNo}
+              keyboardType="numeric"
               value={contactNo}
             />
           </View>
@@ -166,7 +201,7 @@ export default function SignUp({navigation}) {
               justifyContent: 'center',
               marginTop: 20,
             }}
-            // onPress={AddStudentData}
+            onPress={() => SignUpHandler()}
           >
             <Text sytle={{color: '#000'}}>SignUp</Text>
           </TouchableOpacity>
@@ -182,34 +217,7 @@ export default function SignUp({navigation}) {
             <Text style={{color: 'red'}}>LogIn</Text>
           </TouchableOpacity>
         </View>
-        {/* {isDisplayed ? (
-          <>
-            <View
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginTop: 10,
-              }}>
-              <Text style={{color: '#000'}}>Name: {name}</Text>
-            </View>
-            <View
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginTop: 10,
-              }}>
-              <Text style={{color: '#000'}}>Age: {age}</Text>
-            </View>
-            <View
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginTop: 10,
-              }}>
-              <Text style={{color: '#000'}}>Cgpa: {cgpa}</Text>
-            </View>
-          </>
-        ) : null} */}
+        
       </View>
     </View>
   );

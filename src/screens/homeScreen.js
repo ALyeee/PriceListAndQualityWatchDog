@@ -1,7 +1,24 @@
 import {View, Text, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function HomeScreen({navigation}) {
+  const [userData, setUserData] = useState(null)
+  const UserData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@userData')
+      console.log('====================================');
+      console.log('jsonValue',JSON.parse(jsonValue));
+      console.log('====================================');
+      setUserData(JSON.parse(jsonValue))
+    } catch(e) {
+      // error reading value
+    }
+  }
+  useEffect( () => {
+    UserData()
+  }, [])
+  
   return (
     <View style={{flex: 1}}>
       <View
@@ -16,7 +33,7 @@ export default function HomeScreen({navigation}) {
         <Text style={{fontSize: 30, fontWeight: 'bold'}}>Daily Price List</Text>
       </View>
       <View style={{flex: 0.8, alignItems: 'center', marginTop: 10, marginLeft:20 }}>
-        <Text style={{fontSize:20, fontWeight: '500',color:'#000', alignSelf:'flex-start'}}>Welcome to our customer portal</Text>
+        <Text style={{fontSize:20, fontWeight: '500',color:'#000', alignSelf:'flex-start'}}>Welcome {userData?.name}</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate('EssentialComo')}
           style={{

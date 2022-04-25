@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import {
@@ -8,80 +9,39 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, HelperText } from 'react-native-paper';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  const signin = () => {
-        // navigation.navigate('Daily Price List')
-console.log ("Sign In Handleer")
-
-const url ="http://192.168.31.240:8089/myfyp/api/dummy";
-
-const headers = {
-  Accept: 'application/json',
-  ContentType: 'application/json',
-};
-
-
-
-
-    // fetch('http://localhost:8089/myfyp/api/dummy/getall', {
-    //   method: 'GET',
-    //   headers: {
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json',
-    //   }
-    // })
-    //   .then(responseJson => responseJson.json())
-    //   .then(responseJson => {
-    //     if (typeof responseJson === 'string') {
-    //       alert('Invalid Cradentials');
-    //     }
-    //   })
-    //   .catch(error => {
-    //     //
-    //     console.log('Api call error');
-    //     alert(error.message);
-    //   });
-  };
-  
-    const LoginHandler = () => {
+  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState(false);
+   
+    const LoginHandler =  () => {
       setLoading(true)
-      // const data = await fetch(`http://192.168.18.83:8089/myfyp/api/dummy/validateUser?email=${email}&password=${pass}`, {
-      //   method: 'POST',
-      //   headers: {
-      //     Accept: 'application/json',
-      //     'Content-Type': 'application/json',
-      //   }
-       
-      // })
-      try{
-
-        axios.get(`http://jsonplaceholder.typicode.com/todos/1`)
+        axios.post(`http://localhost:8089/myfyp/api/dummy/validateUser?email=${email}&password=${pass}`)
             .then(function (response) {
               console.log(response.data);
-              setLoading(false)
+              if(response.data === 'Invalid Credentials'){
+                setLoading(false)
+                setIsError(true)
+                setError('Invalid Credentials')
+              } else {
+                navigation.navigate('Daily Price List')
+                setError('')
+                setIsError(false)
+                setLoading(false)
+                  try {
+                    const userData = JSON.stringify(response.data[0])
+                    AsyncStorage.setItem('@userData', userData)
+                  } catch (e) {
+                    // saving error
+                  }
+                
+              }
             })
-            .catch(function (error) {
-              console.log(error);
-              setLoading(false)
-            });
-      //   axios.post(`${url}/validateUser?email=${email}&password=${pass}`)
-      //   .then((res)=>{
-      //     console.log ("User Response ",res)
-      //   })
-      //   .catch((err)=>{
-      // console.log(err)
-      //   })
-      }catch(ex){
-        console.log ('in signin api',ex)
-      }
-        
-        // navigation.navigate('Daily Price List')
+            
     };
   return (
     <View style={{flex: 1, backgroundColor: '#0947ed'}}>
@@ -97,12 +57,16 @@ const headers = {
           borderTopEndRadius: 10,
           backgroundColor: '#FFFFFF',
         }}>
+          
         <View
           style={{
             alignItems: 'center',
             justifyContent: 'center',
             marginTop: 50,
           }}>
+            <HelperText type="error" visible={isError}>
+        {error}
+      </HelperText>
           <TextInput
             style={{
               minWidth: '80%',
@@ -156,7 +120,7 @@ const headers = {
             }}
             onPress={() => LoginHandler()}>
             {!loading ? <Text sytle={{color: '#000'}}>Login</Text> : <ActivityIndicator animating={loading} color={'#ffffff'} />}
-          </TouchableOpacity>
+          </TouchableOpacity> 
         </View>
         <View
           style={{
@@ -169,34 +133,7 @@ const headers = {
             <Text style={{color: 'red'}}>SignUp</Text>
           </TouchableOpacity>
         </View>
-        {/* {isDisplayed ? (
-          <>
-            <View
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginTop: 10,
-              }}>
-              <Text style={{color: '#000'}}>Name: {name}</Text>
-            </View>
-            <View
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginTop: 10,
-              }}>
-              <Text style={{color: '#000'}}>Age: {age}</Text>
-            </View>
-            <View
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginTop: 10,
-              }}>
-              <Text style={{color: '#000'}}>Cgpa: {cgpa}</Text>
-            </View>
-          </>
-        ) : null} */}
+        
       </View>
     </View>
   );
