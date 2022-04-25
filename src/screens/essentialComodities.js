@@ -6,17 +6,39 @@ import {TableWrapper} from 'react-native-table-component';
 import {Col} from 'react-native-table-component';
 import {Rows} from 'react-native-table-component';
 import {Actionsheet, Box, NativeBaseProvider, useDisclose} from 'native-base';
+import { Cell } from 'react-native-table-component';
 
 export default function EssentialComodities() {
   const {isOpen, onOpen, onClose} = useDisclose();
   const [selected, setSelected] = useState('Islamabad');
-  const tableTitle = ['1', '2', '3'];
-  const [head, setHead] = useState(['Sr. No', 'Product', 'Unit', 'Price']);
+  const [head, setHead] = useState([ 'Product', 'Unit', 'Price']);
   const [data, setData] = useState([
-    ['Wheat', '10Kg', '800'],
-    ['Tea', '1Kg', '500'],
-    ['Sugar', '1Kg', '96'],
+    ['Sugar', '1Kg', '100',''],
+    ['Moong', '1Kg', '120',''],
+    ['Wheat', '10Kg', '850',''],
+    ['Tea', '1Kg', '560',''],
+    ['Lobhiya Red', '1Kg', '150',''],
+    ['Rice', '1Kg', '200',''],
   ]);
+
+  const element = (data, index) => (
+    <View style={{flexDirection:'row'}} >
+    <TouchableOpacity onPress={() => _alertIndex(data)}>
+      <View style={styles.btn}>
+        <Text style={styles.btnText}>edit</Text>
+      </View>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={() => _alertIndex(data)}>
+      <View style={styles.btn}>
+        <Text style={styles.btnText}>delete</Text>
+      </View>
+    </TouchableOpacity>
+    </View>
+  );
+
+  const _alertIndex = (data) => {
+    alert(`This is row ${data}`);
+  }
   return (
     <View style={{flex: 1}}>
       <View
@@ -51,6 +73,19 @@ export default function EssentialComodities() {
             <Text style={{color: '#000', padding: 5}}>{selected}</Text>
           </TouchableOpacity>
         </View>
+        <View style={{minWidth: '90%'}}>
+          <TouchableOpacity
+            onPress={onOpen}
+            style={{
+              marginTop: 20,
+              borderRadius: 10,
+              alignSelf: 'flex-end',
+              
+            }}>
+            <Text style={{color: '#78B7BB', padding: 5}}>+ Add New</Text>
+          </TouchableOpacity>
+        </View>
+        
         <View
           style={{
             flex: 1,
@@ -58,28 +93,24 @@ export default function EssentialComodities() {
             marginTop: 20,
             maxWidth: '100%',
           }}>
-          <Table borderStyle={{borderWidth: 0.5}}>
-            <Row
-              data={head}
-              flexArr={[1, 2, 1, 1]}
-              style={styles.head}
-              textStyle={styles.text}
-            />
-            <TableWrapper style={styles.wrapper}>
-              <Col
-                data={tableTitle}
-                style={styles.title}
-                heightArr={[28, 28]}
-                textStyle={styles.text}
-              />
-              <Rows
-                data={data}
-                flexArr={[2, 1, 1]}
-                style={styles.row}
-                textStyle={styles.text}
-              />
-            </TableWrapper>
-          </Table>
+          <Table borderStyle={{borderColor: '#000'}}>
+          <Row data={head} style={styles.head} textStyle={styles.text}/>
+          {
+            data.map((rowData, index) => {
+              // console.log('row data',rowData);
+              return (
+              <TableWrapper key={index} style={styles.row}>
+                {
+                  rowData.map((cellData, cellIndex) => {
+                    // console.log('cellfsts',cellData);
+                    return(
+                    <Cell key={cellIndex} data={cellIndex === 3 ? element(rowData, index) : cellData} textStyle={styles.text}/>
+                  )})
+                }
+              </TableWrapper>
+            )})
+          }
+        </Table>
         </View>
       </View>
       <NativeBaseProvider>
@@ -157,10 +188,10 @@ export default function EssentialComodities() {
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff'},
-  head: {height: 40, backgroundColor: '#f1f8ff'},
-  wrapper: {flexDirection: 'row'},
-  title: {flex: 1, color: '#000'},
-  row: {height: 28},
-  text: {textAlign: 'center', color: '#000'},
+  container: { flex: 1, padding: 18, paddingTop: 30, backgroundColor: '#fff' },
+  head: { height: 40, backgroundColor: '#808B97' },
+  text: { margin: 6, color:'#000' },
+  row: { flexDirection: 'row' },
+  btn: { width: 40, height: 18,  borderRadius: 2 },
+  btnText: { textAlign: 'center', color: '#78B7BB' }
 });

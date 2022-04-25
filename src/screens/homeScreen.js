@@ -15,7 +15,8 @@ export default function HomeScreen({navigation}) {
         }}>
         <Text style={{fontSize: 30, fontWeight: 'bold'}}>Daily Price List</Text>
       </View>
-      <View style={{flex: 0.8, alignItems: 'center', marginTop: 20}}>
+      <View style={{flex: 0.8, alignItems: 'center', marginTop: 10, marginLeft:20 }}>
+        <Text style={{fontSize:20, fontWeight: '500',color:'#000', alignSelf:'flex-start'}}>Welcome to our customer portal</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate('EssentialComo')}
           style={{
@@ -24,8 +25,9 @@ export default function HomeScreen({navigation}) {
             minWidth: '90%',
             alignItems: 'center',
             borderRadius: 20,
+            marginTop:20
           }}>
-          <Text style={{padding: 20}}>Essential Comodities</Text>
+          <Text style={{padding: 20}}>Essential Commoditties</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => navigation.navigate('Fruits')}
@@ -64,6 +66,7 @@ export default function HomeScreen({navigation}) {
           <Text style={{padding: 20}}>LiveStock</Text>
         </TouchableOpacity>
         <TouchableOpacity
+        onPress={()=> navigation.navigate('Complains')}
           style={{
             backgroundColor: 'orange',
             maxWidth: '90%',

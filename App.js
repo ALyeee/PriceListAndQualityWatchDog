@@ -8,6 +8,7 @@ import EssentialComodities from './src/screens/essentialComodities';
 import Fruits from './src/screens/fruits';
 import Vegetables from './src/screens/vegetables';
 import LiveStock from './src/screens/liveStock';
+import Complains from './src/screens/complains';
 
 const Stack = createNativeStackNavigator();
 
@@ -53,6 +54,11 @@ const App = () => {
           name="LiveStock"
           options={{headerShown: false}}
           component={LiveStock}
+        />
+        <Stack.Screen
+          name="Complains"
+          options={{headerShown: false}}
+          component={Complains}
         />
       </Stack.Navigator>
     </NavigationContainer>

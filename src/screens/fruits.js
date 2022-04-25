@@ -69,6 +69,18 @@ export default function Fruits() {
             <Text style={{color: '#000', padding: 5}}>{selected}</Text>
           </TouchableOpacity>
         </View>
+        <View style={{minWidth: '90%'}}>
+          <TouchableOpacity
+            // onPress={onOpen}
+            style={{
+              // borderWidth: 1,
+              marginTop: 20,
+              borderRadius: 10,
+              alignSelf: 'flex-end',
+            }}>
+            <Text style={{color: '#78B7BB', padding: 5}}>+ Add New</Text>
+          </TouchableOpacity>
+        </View>
         <View
           style={{
             flex: 1,

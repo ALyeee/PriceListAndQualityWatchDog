@@ -10,12 +10,15 @@ import {Actionsheet, Box, NativeBaseProvider, useDisclose} from 'native-base';
 export default function Vegetables() {
   const {isOpen, onOpen, onClose} = useDisclose();
   const [selected, setSelected] = useState('Islamabad');
-  const tableTitle = ['1', '2', '3'];
+  const tableTitle = ['1', '2', '3','4','5','6'];
   const [head, setHead] = useState(['Sr. No', 'Product', 'Unit', 'Price']);
   const [data, setData] = useState([
+    ['Onions', '5Kg', '220'],
+    ['Lemon', '1Kg', '170'],
+    ['Tomato', '1Kg', '110'],
+    ['Ginger', '1Kg', '220'],
+    ['Garlic', '1Kg', '180'],
     ['Potato', '5Kg', '250'],
-    ['Onions', '5Kg', '250'],
-    ['Tomato', '1Kg', '150'],
   ]);
   return (
     <View style={{flex: 1}}>

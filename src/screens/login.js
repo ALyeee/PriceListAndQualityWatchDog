@@ -16,7 +16,18 @@ const Login = ({navigation}) => {
   const [loading, setLoading] = useState(false);
 
   const signin = () => {
-        navigation.navigate('Daily Price List')
+        // navigation.navigate('Daily Price List')
+console.log ("Sign In Handleer")
+
+const url ="http://192.168.31.240:8089/myfyp/api/dummy";
+
+const headers = {
+  Accept: 'application/json',
+  ContentType: 'application/json',
+};
+
+
+
 
     // fetch('http://localhost:8089/myfyp/api/dummy/getall', {
     //   method: 'GET',
@@ -48,15 +59,27 @@ const Login = ({navigation}) => {
       //   }
        
       // })
-      axios.get(`http://localhost:8089/myfyp/api/dummy/getall`)
-      .then(function (response) {
-        console.log(response);
-        setLoading(false)
-      })
-      .catch(function (error) {
-        console.log(error);
-        setLoading(false)
-      });
+      try{
+
+        axios.get(`http://jsonplaceholder.typicode.com/todos/1`)
+            .then(function (response) {
+              console.log(response.data);
+              setLoading(false)
+            })
+            .catch(function (error) {
+              console.log(error);
+              setLoading(false)
+            });
+      //   axios.post(`${url}/validateUser?email=${email}&password=${pass}`)
+      //   .then((res)=>{
+      //     console.log ("User Response ",res)
+      //   })
+      //   .catch((err)=>{
+      // console.log(err)
+      //   })
+      }catch(ex){
+        console.log ('in signin api',ex)
+      }
         
         // navigation.navigate('Daily Price List')
     };
@@ -131,7 +154,7 @@ const Login = ({navigation}) => {
               justifyContent: 'center',
               marginTop: 20,
             }}
-            onPress={() => signin()}>
+            onPress={() => LoginHandler()}>
             {!loading ? <Text sytle={{color: '#000'}}>Login</Text> : <ActivityIndicator animating={loading} color={'#ffffff'} />}
           </TouchableOpacity>
         </View>
