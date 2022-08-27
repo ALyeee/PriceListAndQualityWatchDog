@@ -19,6 +19,9 @@ const Login = ({navigation}) => {
   const [error, setError] = useState(false);
    
     const LoginHandler =  () => {
+      console.log('====================================');
+      console.log('data',email,pass);
+      console.log('====================================');
       setLoading(true)
         axios.post(`http://localhost:8089/myfyp/api/dummy/validateUser?email=${email}&password=${pass}`)
             .then(function (response) {
@@ -28,7 +31,7 @@ const Login = ({navigation}) => {
                 setIsError(true)
                 setError('Invalid Credentials')
               } else {
-                navigation.navigate('Daily Price List')
+                navigation.navigate('Daily Price List', {userData:response.data})
                 setError('')
                 setIsError(false)
                 setLoading(false)

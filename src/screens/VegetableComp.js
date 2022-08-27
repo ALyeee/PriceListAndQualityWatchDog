@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Table} from 'react-native-table-component';
 import {Row} from 'react-native-table-component';
@@ -10,16 +10,19 @@ import { Cell } from 'react-native-table-component';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { DataTable, Provider, Snackbar } from 'react-native-paper';
+import DropDownPicker from 'react-native-dropdown-picker';
 
-export default function Vegetables() {
-  const {isOpen, onOpen, onClose} = useDisclose();
+export default function VegetableComp() {
   const [selected, setSelected] = useState('Islamabad');
   const [head, setHead] = useState([ 'Product', 'Unit', 'Price','Action']);
   const [head1, setHead1] = useState([ 'Product', 'Unit', 'Price']);
   const [userData, setUserData] = useState(null)
   const [furits, setFruits] = useState(null)
+  const [furits2, setFruits2] = useState(null)
   const [data, setData] = useState([])
   const [data1, setData1] = useState([])
+  const [data2, setData2] = useState([])
+  const [data3, setData3] = useState([])
   const [visible, setVisible] = useState(false)
   const [fruitName, setFruitName] = useState(null)
   const [unit, setUnit] = useState(null)
@@ -27,7 +30,16 @@ export default function Vegetables() {
   const [isAdded, setIsAdded] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const [isDeleted, setIsDeleted] = useState(false)
-
+  const [open1, setOpen1] = useState(false);
+  const [value1, setValue1] = useState(null);
+  const [open2, setOpen2] = useState(false);
+  const [value2, setValue2] = useState(null);
+  const [items, setItems] = useState([
+    {label: 'Islamabad', value: 'islamabad'},
+    {label: 'Rawalpindi', value: 'rawalpindi'}, 
+    {label: 'Faisalabad', value: 'faisalabad'},
+    {label: 'Lahore', value: 'lahore'}
+  ]);
   const UserData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('@userData')
@@ -35,8 +47,6 @@ export default function Vegetables() {
       console.log('jsonValue',JSON.parse(jsonValue));
       console.log('====================================');
       setUserData(JSON.parse(jsonValue))
-      const userCity = JSON.parse(jsonValue)
-      setSelected(userCity.city)
     } catch(e) {  
       // error reading value
     }
@@ -44,11 +54,10 @@ export default function Vegetables() {
   useEffect( () => {
     UserData()
     GetFruits()
-    OnChangeCity('islamabad')
   }, [])
 
   const GetFruits = () => {
-    axios.get(`http://localhost:8089/myfyp/api/dummy/getRecordByCatagoryAndCity?cat=vegitables&city=${userData?.city}`)
+    axios.get(`http://localhost:8089/myfyp/api/dummy/getRecordByCatagoryAndCity?cat=essentialcommoditiea&city=${userData?.city}`)
             .then(function (response) {
               console.log(response);
               console.log('====================================');
@@ -84,7 +93,7 @@ export default function Vegetables() {
   }
 
   const AdddFruit = () => {
-    axios.post(`http://localhost:8089/myfyp/api/dummy/addVegitables?city=${userData?.city}`,{
+    axios.post(`http://localhost:8089/myfyp/api/dummy/AddEssentialAccommodaties?city=${userData?.city}`,{
       "pName":fruitName,
       "pPrice":price,
       "pUnit":unit
@@ -101,7 +110,7 @@ export default function Vegetables() {
   })  
   }
   const EditFruit = () => {
-    axios.post(`http://localhost:8089/myfyp/api/dummy/updateVegitable?city=${userData?.city}`,{
+    axios.post(`http://localhost:8089/myfyp/api/dummy/UpdateEssentialAccommodaties?city=${userData?.city}`,{
       "pName":fruitName,
       "pPrice":price,
       "pUnit":unit
@@ -121,7 +130,7 @@ export default function Vegetables() {
     console.log('====================================');
     console.log('data',data[2]);
     console.log('====================================');
-    axios.post(`http://localhost:8089/myfyp/api/dummy/deleteVegitables?city=${userData?.city}`,{
+    axios.post(`http://localhost:8089/myfyp/api/dummy/deleteEssentialAccommodaties?city=${userData?.city}`,{
       "pName":data[0],
       "pPrice":data[1],
       "pUnit":data[2]
@@ -199,20 +208,55 @@ export default function Vegetables() {
               }
             })
   }
+  const OnChangeCity2 = (city) => {
+    axios.get(`http://localhost:8089/myfyp/api/dummy/getRecordByCatagoryAndCity?cat=vegitables&city=${city}`)
+            .then(function (response) {
+              console.log(response);
+              if(response.data === 'Found'){
+                setFruits2([])
+              } else {
+                let arrayFr = []
+                let arrayFr1 = []
+                let newArr = []
+                let newArr1 = []
+                setFruits2(response.data)
+                response?.data?.map((res) => {
+                   arrayFr = [
+                     res.pName,
+                     res.pUnit,
+                     res.pPrice,
+                     1
+                   ]
+                   arrayFr1 = [
+                     res.pName,
+                     res.pUnit,
+                     res.pPrice,
+                   ]
+                  newArr.push(arrayFr)
+                  newArr1.push(arrayFr1)
+                })
+                setData2(newArr)
+                setData3(newArr1)
+              }
+            })
+  }
 
   return (
     <View style={{flex: 1}}>
+        
+        
       <View
         style={{
-          flex: 0.2,
+          flex: 0.3,
           backgroundColor: 'red',
           borderBottomEndRadius: 20,
           borderBottomStartRadius: 20,
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <Text style={{fontWeight: 'bold', fontSize: 30}}>Vegetables Rates</Text>
+        <Text style={{fontWeight: 'bold', fontSize: 30, textAlign:'center'}}>Vegetables Rates Comparison</Text>
       </View>
+      <ScrollView style={{flex:1}} nestedScrollEnabled={true}>
       <View
         style={{
           flex: 0.8,
@@ -221,16 +265,18 @@ export default function Vegetables() {
           minWidth: '100%',
         }}>
         <View style={{minWidth: '90%'}}>
-          <TouchableOpacity
-            onPress={userData?.role === 'admin' ? null : onOpen}
-            style={{
-              borderWidth: 1,
-              marginTop: 20,
-              borderRadius: 10,
-              alignSelf: 'flex-start',
-            }}>
-            <Text style={{color: '#000', padding: 5}}>{userData?.role === 'admin' ? userData?.city : selected}</Text>
-          </TouchableOpacity>
+        <DropDownPicker
+      open={open1}
+      value={value1}
+      items={items}
+      setOpen={setOpen1}
+      setValue={setValue1}
+      setItems={setItems}
+      onChangeValue={city => OnChangeCity(city)}
+      zIndex={100}
+      style={{maxWidth:'50%'}}
+      containerStyle={{maxWidth:'80%'}}
+    />
         </View>
        {userData?.role === 'admin' ? 
        <View style={{minWidth: '90%'}}>
@@ -256,7 +302,7 @@ export default function Vegetables() {
           style={{
             flex: 1,
             minWidth: '90%',
-            marginTop: 20,
+            marginTop: 70,
             maxWidth: '100%',
           }}>
           { userData?.role === 'admin' ? <Table borderStyle={{borderColor: '#000'}}>
@@ -292,131 +338,95 @@ export default function Vegetables() {
             )})
           }
         </Table>}
-{/* <View style={{flexDirection:'row',justifyContent:'space-evenly'}}>
-<Text style={{color:'#000'}}>Product</Text>
-        <Text style={{color:'#000'}}>Unit</Text>
-       <Text style={{color:'#000'}}>Price</Text>
-       {userData?.role === 'admin' ? <Text style={{color:'#000'}}>Action</Text> : null}
-</View> */}
- 
 
-     {/* { data?.map((res) => {
-        return(
-          <View style={{flexDirection:'row', justifyContent:'space-evenly', marginTop:15}}>
-            {
-              res.map(response => {
-                console.log('====================================');
-                console.log('aaa',response);
-                console.log('====================================');
-                return(
-                    <Text style={{color:'#000', textAlign:'center'}}>{response}</Text>
-                )
-              })
-            }
-            {userData?.role === 'admin' ? <View style={{flexDirection:'row',justifyContent:'center'}} >
-    <TouchableOpacity onPress={() =>{
-      setVisible(true)
-      console.log('====================================');
-      console.log('res',res[2].toString());
-      console.log('====================================');
-      setIsEdit(true)
-      setFruitName(res[0])
-      setUnit(res[1])
-      setprice(res[2].toString())
-      }}>
-      <View style={styles.btn}>
-        <Text style={styles.btnText}>edit</Text>
-      </View>
-    </TouchableOpacity>
-    <TouchableOpacity onPress={() => _alertIndex(res)}>
-      <View style={styles.btn}>
-        <Text style={styles.btnText}>delete</Text>
-      </View>
-    </TouchableOpacity>
-    </View> : null}
-          </View>
-        )
-      })} */}
+
+        </View>
+
+
+        <View style={{minWidth: '90%', marginTop:100}}>
+        <DropDownPicker
+      open={open2}
+      value={value2}
+      items={items}
+      setOpen={setOpen2}
+      setValue={setValue2}
+      setItems={setItems}
+      onChangeValue={city => OnChangeCity2(city)}
+      zIndex={100}
+      style={{maxWidth:'50%'}}
+      containerStyle={{maxWidth:'80%'}}
+    />
+        </View>
+       {userData?.role === 'admin' ? 
+       <View style={{minWidth: '90%', marginTop:70}}>
+          <TouchableOpacity
+            onPress={() => {
+              setIsEdit(false)
+              setFruitName(null)
+              setUnit(null)
+              setprice(null)
+              setVisible(true)
+            }}
+            style={{
+              // borderWidth: 1,
+              marginTop: 20,
+              borderRadius: 10,
+              alignSelf: 'flex-end',
+            }}>
+            <Text style={{color: '#78B7BB', padding: 5}}>+ Add New</Text>
+          </TouchableOpacity>
+        </View> : null
+        }
+        <View
+          style={{
+            flex: 1,
+            minWidth: '90%',
+            marginTop: 70,
+            maxWidth: '100%',
+          }}>
+          { userData?.role === 'admin' ? <Table borderStyle={{borderColor: '#000'}}>
+          <Row data={head} style={styles.head} textStyle={styles.text}/>
+          {
+            data2?.map((rowData, index) => {
+              // console.log('row data',rowData);
+              return (
+              <TableWrapper key={index} style={styles.row}>
+                {
+                  rowData.map((cellData, cellIndex) => {
+                    return(
+                    <Cell key={cellIndex} data={cellIndex === 3 ? element(rowData, index) : cellData} textStyle={styles.text}/>
+                  )})
+                }
+              </TableWrapper>
+            )})
+          }
+        </Table> : <Table borderStyle={{borderColor: '#000'}}>
+          <Row data={head1} style={styles.head} textStyle={styles.text}/>
+          {
+            data3?.map((rowData, index) => {
+              // console.log('row data',rowData);
+              return (
+              <TableWrapper key={index} style={styles.row}>
+                {
+                  rowData.map((cellData, cellIndex) => {
+                    return(
+                    <Cell key={cellIndex} data={cellIndex === 3 ? element(rowData, index) : cellData} textStyle={styles.text}/>
+                  )})
+                }
+              </TableWrapper>
+            )})
+          }
+        </Table>}
+
 
         </View>
       </View>
       <NativeBaseProvider>
-        <Actionsheet isOpen={isOpen} onClose={onClose}>
-          <Actionsheet.Content>
-            <Actionsheet.Item
-              onPress={() => {
-                onClose();
-                setSelected('Islamabad');
-                OnChangeCity('islamabad')
-              }}>
-              <Box alignItems="center">
-                <Text
-                  style={{
-                    fontWeight: 'bold',
-                    fontSize: 20,
-                    color: 'black',
-                  }}>
-                  Islamabad
-                </Text>
-              </Box>
-            </Actionsheet.Item>
-            <Actionsheet.Item
-              onPress={() => {
-                onClose();
-                setSelected('Rawalpindi');
-                OnChangeCity('rawalpindi')
-              }}>
-              <Box alignItems="center">
-                <Text
-                  style={{
-                    fontWeight: 'bold',
-                    fontSize: 20,
-                    color: 'black',
-                  }}>
-                  Rawalpindi
-                </Text>
-              </Box>
-            </Actionsheet.Item>
-            <Actionsheet.Item
-              onPress={() => {
-                onClose();
-                setSelected('faislabad');
-                OnChangeCity('faisalabad')
-              }}>
-              <Box alignItems="center">
-                <Text
-                  style={{
-                    fontWeight: 'bold',
-                    fontSize: 20,
-                    color: 'black',
-                  }}>
-                  Faisalabad
-                </Text>
-              </Box>
-            </Actionsheet.Item>
-            <Actionsheet.Item
-              onPress={() => {
-                onClose();
-                setSelected('Lahore');
-                OnChangeCity('lahore')
-              }}>
-              <Box alignItems="center">
-                <Text
-                  style={{
-                    fontWeight: 'bold',
-                    fontSize: 20,
-                    color: 'black',
-                  }}>
-                  Lahore
-                </Text>
-              </Box>
-            </Actionsheet.Item>
-          </Actionsheet.Content>
-        </Actionsheet>
+        
         <Modal isOpen={visible} onClose={() => setVisible(false)}>
         <Modal.Content maxWidth="500px">
           <Modal.CloseButton />
-          <Modal.Header>Add Vegetable</Modal.Header>
+          <Modal.Header>Add Essential Commodities</Modal.Header>
           <Modal.Body>
           <TextInput
             style={{
@@ -425,7 +435,7 @@ export default function Vegetables() {
               borderRadius: 5,
               color: '#000',
             }}
-            placeholder="Vegetable Name"
+            placeholder="EssentialComodities Name"
             placeholderTextColor={'#000'}
             onChangeText={setFruitName}
             value={fruitName}
@@ -496,7 +506,7 @@ export default function Vegetables() {
             setIsAdded(false)
           },
         }}>
-       {!isEdit ? "Vegetable Added SuccessFully" : "Vegetable Updated Successfully"}
+       {!isEdit ? "Essential Commodities Added SuccessFully" : "Essential Commodities Updated Successfully"}
       </Snackbar>
       <Snackbar
         visible={isDeleted}
@@ -507,8 +517,9 @@ export default function Vegetables() {
             setIsAdded(false)
           },
         }}>
-       {"Vegetable Deleted Successfully"}
+       {"Essential Commodities Deleted Successfully"}
       </Snackbar>
+      </ScrollView>
     </View>
   );
 }

@@ -9,6 +9,12 @@ import Fruits from './src/screens/fruits';
 import Vegetables from './src/screens/vegetables';
 import LiveStock from './src/screens/liveStock';
 import Complains from './src/screens/complains';
+import AddComplains from './src/screens/addComplains';
+import Comparison from './src/screens/Comparison';
+import EssentialComparison from './src/screens/EssentialComparison';
+import FruitComp from './src/screens/FruitComp.';
+import VegetableComp from './src/screens/VegetableComp';
+import LiveStockComp from './src/screens/LiveStockComp';
 
 const Stack = createNativeStackNavigator();
 
@@ -59,6 +65,36 @@ const App = () => {
           name="Complains"
           options={{headerShown: false}}
           component={Complains}
+        />
+        <Stack.Screen
+          name="AddComplains"
+          options={{headerShown: false}}
+          component={AddComplains}
+        />
+        <Stack.Screen
+          name="comparison"
+          options={{headerShown: false}}
+          component={Comparison}
+        />
+        <Stack.Screen
+          name="essentialComparison"
+          options={{headerShown: false}}
+          component={EssentialComparison}
+        />
+        <Stack.Screen
+          name="FruitComp"
+          options={{headerShown: false}}
+          component={FruitComp}
+        />
+        <Stack.Screen
+          name="VegetableComp"
+          options={{headerShown: false}}
+          component={VegetableComp}
+        />
+        <Stack.Screen
+          name="LiveStockComp"
+          options={{headerShown: false}}
+          component={LiveStockComp}
         />
       </Stack.Navigator>
     </NavigationContainer>
