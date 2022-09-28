@@ -9,7 +9,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import { ActivityIndicator, HelperText } from 'react-native-paper';
+import {ActivityIndicator, HelperText} from 'react-native-paper';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -17,35 +17,39 @@ const Login = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState(false);
-   
-    const LoginHandler =  () => {
-      console.log('====================================');
-      console.log('data',email,pass);
-      console.log('====================================');
-      setLoading(true)
-        axios.post(`http://localhost:8089/myfyp/api/dummy/validateUser?email=${email}&password=${pass}`)
-            .then(function (response) {
-              console.log(response.data);
-              if(response.data === 'Invalid Credentials'){
-                setLoading(false)
-                setIsError(true)
-                setError('Invalid Credentials')
-              } else {
-                navigation.navigate('Daily Price List', {userData:response.data})
-                setError('')
-                setIsError(false)
-                setLoading(false)
-                  try {
-                    const userData = JSON.stringify(response.data[0])
-                    AsyncStorage.setItem('@userData', userData)
-                  } catch (e) {
-                    // saving error
-                  }
-                
-              }
-            })
-            
-    };
+
+  const LoginHandler = () => {
+    console.log('====================================');
+    console.log('data', email, pass);
+    console.log('====================================');
+    setLoading(true);
+    axios
+      .post(
+        `http://localhost:8089/myfyp/api/dummy/validateUser?email=${email}&password=${pass}`,
+      )
+      .then(function (response) {
+        console.log(
+          '*****************************************************************************',
+        );
+        console.log(response.data);
+        if (response.data === 'Invalid Credentials') {
+          setLoading(false);
+          setIsError(true);
+          setError('Invalid Credentials');
+        } else {
+          navigation.navigate('Daily Price List', {userData: response.data});
+          setError('');
+          setIsError(false);
+          setLoading(false);
+          try {
+            const userData = JSON.stringify(response.data[0]);
+            AsyncStorage.setItem('@userData', userData);
+          } catch (e) {
+            // saving error
+          }
+        }
+      });
+  };
   return (
     <View style={{flex: 1, backgroundColor: '#0947ed'}}>
       <View style={{flex: 0.4, alignItems: 'center', justifyContent: 'center'}}>
@@ -60,16 +64,15 @@ const Login = ({navigation}) => {
           borderTopEndRadius: 10,
           backgroundColor: '#FFFFFF',
         }}>
-          
         <View
           style={{
             alignItems: 'center',
             justifyContent: 'center',
             marginTop: 50,
           }}>
-            <HelperText type="error" visible={isError}>
-        {error}
-      </HelperText>
+          <HelperText type="error" visible={isError}>
+            {error}
+          </HelperText>
           <TextInput
             style={{
               minWidth: '80%',
@@ -122,8 +125,12 @@ const Login = ({navigation}) => {
               marginTop: 20,
             }}
             onPress={() => LoginHandler()}>
-            {!loading ? <Text sytle={{color: '#000'}}>Login</Text> : <ActivityIndicator animating={loading} color={'#ffffff'} />}
-          </TouchableOpacity> 
+            {!loading ? (
+              <Text sytle={{color: '#000'}}>Login</Text>
+            ) : (
+              <ActivityIndicator animating={loading} color={'#ffffff'} />
+            )}
+          </TouchableOpacity>
         </View>
         <View
           style={{
@@ -136,7 +143,6 @@ const Login = ({navigation}) => {
             <Text style={{color: 'red'}}>SignUp</Text>
           </TouchableOpacity>
         </View>
-        
       </View>
     </View>
   );

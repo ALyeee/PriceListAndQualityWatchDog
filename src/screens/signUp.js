@@ -7,8 +7,10 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
-import { HelperText } from 'react-native-paper';
+import {HelperText} from 'react-native-paper';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 export default function SignUp({navigation}) {
   const [name, setName] = useState('');
@@ -19,74 +21,75 @@ export default function SignUp({navigation}) {
   const [contactNo, setContactNo] = useState(null);
   const [success, setSuccess] = useState('');
   const [isSucess, setIsSuccess] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    {label: 'Islamabad', value: 'islamabad'},
+    {label: 'Rawalpindi', value: 'rawalpindi'},
+    {label: 'Karachi', value: 'karachi'},
+    {label: 'Lahore', value: 'lahore'},
+  ]);
+
   const SignUpHandler = () => {
     // setLoading(true)
-      axios.post(`http://localhost:8089/myfyp/api/dummy/addNewUser`,{
+    axios
+      .post(`http://localhost:8089/myfyp/api/dummy/addNewUser`, {
         name: name,
-    email: email,
-    password: pass,
-    city: city,
-    address: address,
-    contact: contactNo,
-    role: "user"
+        email: email,
+        password: pass,
+        city: city,
+        address: address,
+        contact: contactNo,
+        role: 'user',
       })
-          .then(function (response) {
-            console.log(response.data);
-            if(response.data === 'User Added Successfully'){
-              setIsSuccess(true)
-              setTimeout(() => {
-                setIsSuccess(false)
-              }, 2000);
-              setSuccess('SignUp Successfully')
-            } 
-          })
-          .catch(function (error) {
-            setIsSuccess(true)
-            setSuccess('Error Occured')
-            console.log('error in signin',error);
-          });
+      .then(function (response) {
+        console.log(response.data);
+        if (response.data === 'User Added Successfully') {
+          setIsSuccess(true);
+          setTimeout(() => {
+            setIsSuccess(false);
+          }, 2000);
+          setSuccess('SignUp Successfully');
+        }
+      })
+      .catch(function (error) {
+        setIsSuccess(true);
+        setSuccess('Error Occured');
+        console.log('error in signin', error);
+      });
   };
   return (
-    <View style={{flex: 1, backgroundColor: '#0947ed'}}>
-      <View style={{flex: 0.2, alignItems: 'center', justifyContent: 'center'}}>
-        <Text style={{fontSize: 24, textAlign: 'center', color: '#FFFFFF'}}>
-          SignUp as user
-        </Text>
-      </View>
-      <View
-        style={{
-          flex: 0.8,
-          borderTopStartRadius: 10,
-          borderTopEndRadius: 10,
-          backgroundColor: '#FFFFFF',
-        }}>
+    <ScrollView
+      style={{
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'white',
+      }}>
+      <View style={{flex: 1, backgroundColor: '#0947ed'}}>
         <View
           style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: 50,
+            flex: 0.8,
+            borderTopStartRadius: 10,
+            borderTopEndRadius: 10,
+            backgroundColor: '#FFFFFF',
           }}>
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: 10,
+            }}>
             <HelperText type="info" visible={isSucess}>
-        {success}
-      </HelperText>
-          <TextInput
-            style={{
-              minWidth: '80%',
-              borderWidth: 1,
-              borderRadius: 5,
-              color: '#000',
-            }}
-            placeholder="Name"
-            placeholderTextColor={'#000'}
-            onChangeText={setName}
-            value={name}
-          />
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: 10,
-            }}>
+              {success}
+            </HelperText>
+            <Text
+              style={{
+                minWidth: '80%',
+                color: '#000',
+                marginBottom: 10,
+              }}>
+              Name
+            </Text>
             <TextInput
               style={{
                 minWidth: '80%',
@@ -94,132 +97,196 @@ export default function SignUp({navigation}) {
                 borderRadius: 5,
                 color: '#000',
               }}
-              
-              placeholder="City"
-              placeholderTextColor={'#000'}
-              onChangeText={setCity}
-              value={city}
+              placeholder="Name"
+              placeholderTextColor={'grey'}
+              onChangeText={setName}
+              value={name}
             />
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 10,
+              }}>
+              <Text
+                style={{
+                  minWidth: '80%',
+                  color: '#000',
+                  marginBottom: 10,
+                }}>
+                City
+              </Text>
+              <DropDownPicker
+                style={{
+                  minWidth: '80%',
+                }}
+                open={open}
+                value={city}
+                items={items}
+                setOpen={setOpen}
+                setValue={setCity}
+                setItems={setItems}
+              />
+              {/* <TextInput
+                style={{
+                  minWidth: '80%',
+                  borderWidth: 1,
+                  borderRadius: 5,
+                  color: '#000',
+                }}
+                placeholder="City"
+                placeholderTextColor={'grey'}
+                onChangeText={setCity}
+                value={city}
+              /> */}
+            </View>
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 10,
+              }}>
+              <Text
+                style={{
+                  minWidth: '80%',
+                  color: '#000',
+                  marginBottom: 10,
+                }}>
+                Email
+              </Text>
+              <TextInput
+                style={{
+                  minWidth: '80%',
+                  borderWidth: 1,
+                  borderRadius: 5,
+                  color: '#000',
+                }}
+                placeholder="Email"
+                placeholderTextColor={'grey'}
+                onChangeText={setEmail}
+                value={email}
+              />
+            </View>
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 10,
+              }}>
+              <Text
+                style={{
+                  minWidth: '80%',
+                  color: '#000',
+                  marginBottom: 10,
+                }}>
+                Password
+              </Text>
+              <TextInput
+                style={{
+                  minWidth: '80%',
+                  borderWidth: 1,
+                  borderRadius: 5,
+                  color: '#000',
+                }}
+                secureTextEntry
+                placeholder="Password"
+                placeholderTextColor={'grey'}
+                onChangeText={setPass}
+                value={pass}
+              />
+            </View>
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 10,
+              }}>
+              <Text
+                style={{
+                  minWidth: '80%',
+                  color: '#000',
+                  marginBottom: 10,
+                }}>
+                Address
+              </Text>
+              <TextInput
+                style={{
+                  minWidth: '80%',
+                  borderWidth: 1,
+                  borderRadius: 5,
+                  color: '#000',
+                }}
+                placeholder="Address"
+                placeholderTextColor={'grey'}
+                onChangeText={setAddress}
+                value={address}
+              />
+            </View>
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 10,
+              }}>
+              <Text
+                style={{
+                  minWidth: '80%',
+                  color: '#000',
+                  marginBottom: 10,
+                }}>
+                Phone
+              </Text>
+              <TextInput
+                style={{
+                  minWidth: '80%',
+                  borderWidth: 1,
+                  borderRadius: 5,
+                  color: '#000',
+                }}
+                placeholder="phone"
+                placeholderTextColor={'grey'}
+                onChangeText={setContactNo}
+                keyboardType="numeric"
+                value={contactNo}
+              />
+            </View>
           </View>
           <View
             style={{
               alignItems: 'center',
               justifyContent: 'center',
               marginTop: 10,
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
             }}>
-            <TextInput
+            <TouchableOpacity
               style={{
-                minWidth: '80%',
-                borderWidth: 1,
+                backgroundColor: '#308bf6',
                 borderRadius: 5,
-                color: '#000',
+                minWidth: '30%',
+                minHeight: 30,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 20,
               }}
-              
-              placeholder="Email"
-              placeholderTextColor={'#000'}
-              onChangeText={setEmail}
-              value={email}
-            />
+              onPress={() => SignUpHandler()}>
+              <Text sytle={{color: '#000'}}>SignUp</Text>
+            </TouchableOpacity>
           </View>
           <View
             style={{
-              alignItems: 'center',
-              justifyContent: 'center',
+              flexDirection: 'row',
               marginTop: 10,
-            }}>
-            <TextInput
-              style={{
-                minWidth: '80%',
-                borderWidth: 1,
-                borderRadius: 5,
-                color: '#000',
-              }}
-              secureTextEntry
-              placeholder="Password"
-              placeholderTextColor={'#000'}
-              onChangeText={setPass}
-              value={pass}
-            />
-          </View>
-          <View
-            style={{
-              alignItems: 'center',
               justifyContent: 'center',
-              marginTop: 10,
             }}>
-            <TextInput
-              style={{
-                minWidth: '80%',
-                borderWidth: 1,
-                borderRadius: 5,
-                color: '#000',
-              }}
-              
-              placeholder="Address"
-              placeholderTextColor={'#000'}
-              onChangeText={setAddress}
-              value={address}
-            />
-          </View>
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: 10,
-            }}>
-            <TextInput
-              style={{
-                minWidth: '80%',
-                borderWidth: 1,
-                borderRadius: 5,
-                color: '#000',
-              }}
-              
-              placeholder="Contact No."
-              placeholderTextColor={'#000'}
-              onChangeText={setContactNo}
-              keyboardType="numeric"
-              value={contactNo}
-            />
+            <Text style={{color: '#000'}}>Already have an account </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+              <Text style={{color: 'red'}}>LogIn</Text>
+            </TouchableOpacity>
           </View>
         </View>
-        <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: 10,
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
-          }}>
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#308bf6',
-              borderRadius: 5,
-              minWidth: '30%',
-              minHeight: 30,
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: 20,
-            }}
-            onPress={() => SignUpHandler()}
-          >
-            <Text sytle={{color: '#000'}}>SignUp</Text>
-          </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 10,
-            justifyContent: 'center',
-          }}>
-          <Text style={{color: '#000'}}>Already have an account </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={{color: 'red'}}>LogIn</Text>
-          </TouchableOpacity>
-        </View>
-        
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

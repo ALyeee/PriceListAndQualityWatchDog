@@ -15,6 +15,10 @@ import EssentialComparison from './src/screens/EssentialComparison';
 import FruitComp from './src/screens/FruitComp.';
 import VegetableComp from './src/screens/VegetableComp';
 import LiveStockComp from './src/screens/LiveStockComp';
+import PendingComplains from './src/screens/PendingComplains';
+import ResolvedComplains from './src/screens/ResolvedComplains';
+import HallOfFame from './src/screens/hallOfFame';
+import HallOfShame from './src/screens/hallOfShame';
 
 const Stack = createNativeStackNavigator();
 
@@ -95,6 +99,26 @@ const App = () => {
           name="LiveStockComp"
           options={{headerShown: false}}
           component={LiveStockComp}
+        />
+        <Stack.Screen
+          name="PendingComplains"
+          options={{headerShown: false}}
+          component={PendingComplains}
+        />
+        <Stack.Screen
+          name="ResolvedComplains"
+          options={{headerShown: false}}
+          component={ResolvedComplains}
+        />
+        <Stack.Screen
+          name="HallOfFame"
+          options={{headerShown: false}}
+          component={HallOfFame}
+        />
+        <Stack.Screen
+          name="HallOfShame"
+          options={{headerShown: false}}
+          component={HallOfShame}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -22,7 +22,7 @@ import {Row} from 'react-native-table-component';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Complains({navigation}) {
+export default function HallOfShame({navigation}) {
   const {isOpen, onOpen, onClose} = useDisclose();
   const [selected, setSelected] = useState('Select City');
   const [email, setEmail] = useState('');
@@ -53,7 +53,8 @@ export default function Complains({navigation}) {
       console.log('====================================');
       setUserData(JSON.parse(jsonValue));
       const userCity = JSON.parse(jsonValue);
-      setSelected(userCity.city);
+      setSelected(JSON.parse(jsonValue.city));
+      OnChangeCity(userCity.city);
     } catch (e) {
       // error reading value
     }
@@ -61,101 +62,65 @@ export default function Complains({navigation}) {
   useEffect(() => {
     UserData();
     // GetFruits()
-    OnChangeCity('islamabad');
-  }, []);
+  }, [selected]);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      OnChangeCity('islamabad');
-    }, []),
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     UserData();
+  //     OnChangeCity('islamabad');
+  //   }, [selected]),
+  // );
 
   const OnChangeCity = async city => {
-    console.log(city);
+    console.log('====================================');
+    console.log('city', city);
+    console.log('====================================');
     setLoading(true);
-    const jsonValue = JSON.parse(await AsyncStorage.getItem('@userData'));
-    console.log(jsonValue.email);
-    if (jsonValue.email === 'superadmin') {
-      axios
-        .get(
-          `http://localhost:8089/myfyp/api/dummy/GetAllComplainsForSuperAdmin?city=${city}`,
-        )
-        .then(function (response) {
-          setDataComplaint(response.data);
-          if (response.data === 'Found') {
-            setFruits([]);
-          } else {
-            let arrayFr = [];
-            let arrayFr1 = [];
-            let newArr = [];
-            let newArr1 = [];
-            setComplains(response?.data);
-            response?.data?.map(res => {
-              arrayFr = [
-                res.city,
-                'null',
-                res.shop_name,
-                res.address,
-                res.complain_type,
-                1,
-              ];
-              arrayFr1 = [
-                'null',
-                res.city,
-                res.shop_name,
-                res.address,
-                res.complain_type,
-              ];
-              newArr.push(arrayFr);
-              newArr1.push(arrayFr1);
-            });
-
-            setData(newArr);
-            setData1(newArr1);
-          }
-          setLoading(false);
-        });
-    } else {
-      axios
-        .get(
-          `http://localhost:8089/myfyp/api/dummy/GetComplainByStatus?status=Pending&email=${jsonValue.email}`,
-        )
-        .then(function (response) {
-          setDataComplaint(response.data);
-          if (response.data === 'Found') {
-            setFruits([]);
-          } else {
-            let arrayFr = [];
-            let arrayFr1 = [];
-            let newArr = [];
-            let newArr1 = [];
-            setComplains(response?.data);
-            response?.data?.map(res => {
-              arrayFr = [
-                res.city,
-                'null',
-                res.shop_name,
-                res.address,
-                res.complain_type,
-                1,
-              ];
-              arrayFr1 = [
-                'null',
-                res.city,
-                res.shop_name,
-                res.address,
-                res.complain_type,
-              ];
-              newArr.push(arrayFr);
-              newArr1.push(arrayFr1);
-            });
-
-            setData(newArr);
-            setData1(newArr1);
-          }
-          setLoading(false);
-        });
-    }
+    // const jsonValue = JSON.parse(await AsyncStorage.getItem('@userData'));
+    // setSelected(jsonValue.city);
+    // console.log(jsonValue.email);
+    axios
+      .get(
+        `http://localhost:8089/myfyp/api/dummy/getHallOfShameByCity?city=${city}`,
+      )
+      .then(function (response) {
+        console.log('this is the current response', response);
+        setDataComplaint(response.data);
+        if (response.data === 'Found') {
+          setFruits([]);
+        } else {
+          let arrayFr = [];
+          let arrayFr1 = [];
+          let newArr = [];
+          let newArr1 = [];
+          setComplains(response.data);
+          response?.data?.map(res => {
+            arrayFr = [
+              res.city,
+              'null',
+              res.shop_name,
+              res.address,
+              res.complain_type,
+              1,
+            ];
+            arrayFr1 = [
+              'null',
+              res.city,
+              res.shop_name,
+              res.address,
+              res.complain_type,
+            ];
+            newArr.push(arrayFr);
+            newArr1.push(arrayFr1);
+          });
+          console.log('====================================');
+          console.log('data1', arrayFr1);
+          console.log('====================================');
+          setData(newArr);
+          setData1(newArr1);
+        }
+        setLoading(false);
+      });
   };
 
   if (loading) {
@@ -198,18 +163,15 @@ export default function Complains({navigation}) {
   const Item = ({item, onPress, backgroundColor, textColor}) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
       <View style={styles.card}>
-        <Text style={styles.amount}>{item.name}</Text>
-        <Text style={styles.amount}>{item.shop_name}</Text>
-        <Text style={[styles.amount, textColor]}>{item.address}</Text>
-        <Text style={styles.amount}>{item.city}</Text>
-        <Text style={styles.amount}>{item.complain_type}</Text>
+        <Text style={styles.amount}>{item.ShopName}</Text>
+        <Text style={styles.amount}>{item.Counter}</Text>
       </View>
       {/* <View style={styles.detsContainer}>
-      <Text style={[styles.detsStyler, styles.marginlizer]}>
-        {item.donationType}
-      </Text>
-      <Text style={styles.detsStyler}>{item.paymentMethod}</Text>
-    </View> */}
+        <Text style={[styles.detsStyler, styles.marginlizer]}>
+          {item.donationType}
+        </Text>
+        <Text style={styles.detsStyler}>{item.paymentMethod}</Text>
+      </View> */}
     </TouchableOpacity>
   );
   const renderItem = ({item}) => {
@@ -238,71 +200,12 @@ export default function Complains({navigation}) {
           justifyContent: 'center',
           minHeight: '10%',
         }}>
-        <Text style={{fontWeight: 'bold', fontSize: 30}}>All Complains</Text>
+        <Text style={{fontWeight: 'bold', fontSize: 30}}>Hall Of Shame</Text>
       </View>
-      <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-        {userData?.role === 'admin' || userData?.role === 'super' ? null : (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('AddComplains')}
-            style={{
-              backgroundColor: 'red',
-              minHeight: 50,
-              borderRadius: 10,
-              maxWidth: '35%',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 20,
-              marginLeft: 20,
-            }}>
-            <Text>+ Add Complain</Text>
-          </TouchableOpacity>
-        )}
-        <TouchableOpacity
-          onPress={() => navigation.navigate('PendingComplains')}
-          style={{
-            backgroundColor: 'red',
-            minHeight: 50,
-            borderRadius: 10,
-            maxWidth: '35%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 20,
-            marginLeft: 10,
-          }}>
-          <Text style={{marginHorizontal: 10}}>Pending Complains</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('ResolvedComplains')}
-          style={{
-            backgroundColor: 'red',
-            minHeight: 50,
-            borderRadius: 10,
-            maxWidth: '35%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 20,
-            marginLeft: 10,
-          }}>
-          <Text style={{marginHorizontal: 10}}>Resolved Complains</Text>
-        </TouchableOpacity>
-      </View>
+
       <View style={{minWidth: '90%', alignSelf: 'center', marginTop: 10}}>
-        <Text
-          style={{
-            color: '#000',
-            fontWeight: 'bold',
-            fontSize: 24,
-            textAlign: 'center',
-          }}>
-          All Complains
-        </Text>
         <TouchableOpacity
-          onPress={() => {
-            console.log(userData);
-            if (userData.email === 'superadmin') {
-              onOpen();
-            }
-          }}
+          onPress={onOpen}
           style={{
             borderWidth: 1,
             marginTop: 20,
@@ -316,11 +219,9 @@ export default function Complains({navigation}) {
       <View>
         <SafeAreaView>
           <View style={styles.headingContainer}>
-            <Text style={styles.headerText}>Name</Text>
-            <Text style={styles.headerText}>ShopName</Text>
-            <Text style={styles.headerText}>Address</Text>
-            <Text style={styles.headerText}>City</Text>
-            <Text style={styles.headerText}>ComplainType</Text>
+            <Text style={styles.headerText}>Shop Name</Text>
+
+            <Text style={styles.headerText}>Complain Count</Text>
           </View>
           <FlatList
             data={dataComplaint}
